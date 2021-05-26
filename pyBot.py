@@ -43,12 +43,12 @@ file2.close()
 
 
 reddit = praw.Reddit(
-    client_id="",
-    client_secret="",
-    user_agent="",
-    redirect_uri="",
-    username="",
-    password=""
+    client_id="SSjMV8IXavimNA",
+    client_secret="hF-8BJOKFTGJL7ZRa1q9TuHdAFdxqg",
+    user_agent="positive to negative ratio bot by bot_test_account_01",
+    redirect_uri="http://localhost:8080",
+    username="bot_test_account_01",
+    password="371458"
 )
 
 
