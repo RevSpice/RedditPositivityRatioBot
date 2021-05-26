@@ -1,11 +1,11 @@
 import praw
-from tkinter import*
+import tkinter as tk
 from psaw import PushshiftAPI
 
 
 
 
-from matplotlib import pyplot as plt
+import matplotlib.pyplot as plt
 import numpy as np
 api = PushshiftAPI()
 
@@ -21,8 +21,7 @@ api = PushshiftAPI()
 
 
 
-posCount=0
-negCount=0
+
 
 
 file1=open("posWords.txt", "r")
@@ -41,8 +40,7 @@ file2.close()
 
 
 
-'''for x in content_list:
-    print(x)'''
+
 
 reddit = praw.Reddit(
     client_id="SSjMV8IXavimNA",
@@ -56,18 +54,30 @@ reddit = praw.Reddit(
 
 
 
-
-
-while True:
-
-    print("What subreddit do you want to analyze?")
-
-
+    
+         
      
 
-    subredditSelected=input()
 
-    gen = api.search_submissions(subreddit=subredditSelected,limit=1000)   
+
+
+  
+
+def submit():
+    posCount=0
+    negCount=0
+
+    subredditSelected=a.get()
+    x=int(b.get())
+ 
+    
+ 
+    subredditNameVar.set("")
+    subredditSampleVar.set("")
+
+
+
+    gen = api.search_submissions(subreddit=subredditSelected,limit=x)   
 
 
     for submission in gen:
@@ -87,6 +97,14 @@ while True:
       
     print(posCount)
 
+
+
+
+    def helpFunc(pct, allvalues):
+        allvalues = int(round(pct/100.*np.sum(allvalues)))
+        return "{:.1f}%\n({:d} words)".format(pct, allvalues)
+
+
     print(negCount)
 
     ratio=round(posCount/negCount, 3)
@@ -96,13 +114,47 @@ while True:
     data=[posCount, negCount]
 
     label=["positive words found", "negative words found"]
-    fig = plt.figure(figsize =(10, 7))
-    plt.pie(data, labels = label)
-      
-    # show plot
+    fig=plt.figure(figsize =(10, 7))
+
+
+    
+    
+    plt.pie(data, labels = label, autopct = lambda pct: helpFunc(pct, data))
+    plt.suptitle("r/"+subredditSelected)
+    plt.title("Positivity ratio:"+str(ratio))
+    
+    plt.plot(ratio)
+
     plt.show()
     posCount=0
     negCount=0
+    
+
+    
+    
+
+master=tk.Tk()
+master.geometry("500x100")
+master.title("Positivity proportion bot")
+
+subredditNameVar=tk.StringVar()
+subredditSampleVar=tk.IntVar()
 
 
+tk.Label(master, text="What subreddit do you want to analyze?").grid(row=0)
+tk.Label(master, text="What sample size do you want (# of newests posts for bot to read)?").grid(row=1)
+
+a=tk.Entry(master, textvariable=subredditNameVar)
+b=tk.Entry(master, textvariable=subredditSampleVar)
+
+a.grid(row=0, column=1)
+b.grid(row=1, column=1)
+
+sub_btn=tk.Button(master,text = 'Submit', command = submit)
+sub_btn.grid(row=2,column=1)
+
+master.mainloop()
+
+
+    
 
