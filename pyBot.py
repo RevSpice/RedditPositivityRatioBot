@@ -1,6 +1,6 @@
 import praw
 import tkinter as tk
-from psaw import PushshiftAPI
+from pmaw import PushshiftAPI
 
 
 
@@ -24,14 +24,14 @@ api = PushshiftAPI()
 
 
 
-file1=open("posWords.txt", "r")
+file1=open("C:/Users/mrssp/Desktop/IBMPREP-ALSO-GENERICPREP/redditBot/posWords.txt", "r")
 
 content = file1.read()
 content_list = content.split()
 file1.close()
 
 
-file2=open("negWords.txt", "r")
+file2=open("C:/Users/mrssp/Desktop/IBMPREP-ALSO-GENERICPREP/redditBot/negWords.txt", "r")
 
 content=file2.read()
 content_list2=content.split();
@@ -43,16 +43,13 @@ file2.close()
 
 
 reddit = praw.Reddit(
-    client_id="",
-    client_secret="",
-    user_agent="",
-    redirect_uri="",
-    username="",
-    password=""
+    client_id="qRXXRaq_JFUgr6AgAkvvLA", #you need to create the account for the reddit bot 
+    client_secret="kxyTmuDHqDi-vCC29p1TfWxABx9zbw",
+    user_agent="reddit bot that analyzes positivity/negativity",
 )
 
 
-
+print(reddit.read_only)
 
     
          
@@ -65,7 +62,7 @@ reddit = praw.Reddit(
 
 def submit():
     posCount=0
-    negCount=0
+    negCount=0 #set to 1 to avoid error
 
     subredditSelected=a.get()
     x=int(b.get())
@@ -77,11 +74,12 @@ def submit():
 
 
 
-    gen = api.search_submissions(subreddit=subredditSelected,limit=x)   
-
+   # gen = api.search_submissions(subreddit=subredditSelected,limit=x, until=1564673944)   
+    gen=[submission for submission in reddit.subreddit(subredditSelected).hot(limit=x)]
 
     for submission in gen:
         postTitle=submission.title.lower()
+        #print(postTitle)
         
         for word in content_list:
             if word in postTitle:
